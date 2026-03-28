@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="cs" data-theme="light">
+<!--
+  =============================================================
+  PEXESO – Paměťová hra s retro/vintage stylem
+  =============================================================
+  Autor:    Amálie Jirotková
+  Verze:    1.0
+  Datum:    2026
+
+  Cíl projektu:
+    Interaktivní webová hra Pexeso splňující požadavky
+    na moderní HTML5, CSS3 a JavaScript OOP přístup.
+
+  Funkčnost:
+    - Výběr obtížnosti (4×4, 6×6, 8×8)
+    - Nastavení hlasitosti zvuků
+    - Časovač
+    - Tmavý / světlý režim
+    - LocalStorage pro uložení nejlepšího výsledku
+    - SVG grafika karet generovaná JavaScriptem
+    - Offline detekce
+    - History API pro navigaci zpět
+  =============================================================
+-->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Pexeso – retro paměťová hra s ovocem a zeleninou" />
+  <title>Pexeso</title>
+
+  <!-- Google Fonts -->
+  <link
+          href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Lora:wght@400;600&display=swap"
+          rel="stylesheet"
+  />
+
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+<!--
+  Tato stránka je rozdělena do dvou hlavních "obrazovek":
+  1. #screen-menu  – úvodní menu
+  2. #screen-game  – samotná hra
+  Přepínání obstarává JavaScript (třída Game).
+-->
+
+<!-- ===================== MENU OBRAZOVKA ===================== -->
+<section id="screen-menu" class="screen active" aria-label="Hlavní menu">
+
+  <!-- Dekorativní SVG pozadí v hlavičce (generováno JS) -->
+  <svg id="header-bg" aria-hidden="true"></svg>
+
+  <header class="menu-header">
+    <h1 class="game-title">
+      <span class="title-deco">✦</span>
+      Pexeso
+      <span class="title-deco">✦</span>
+    </h1>
+    <p class="game-subtitle"><em>Retro paměťová hra</em></p>
+  </header>
+
+  <main class="menu-main">
+
+    <!-- Formulář nastavení hry -->
+    <form id="game-settings" class="settings-form" novalidate>
+      <fieldset class="settings-group">
+        <legend>Nastavení hry</legend>
+
+        <!-- Výběr obtížnosti pomocí radio tlačítek -->
+        <div class="field-group">
+          <label class="field-label">Obtížnost</label>
+          <div class="radio-group" role="radiogroup" aria-label="Volba obtížnosti">
+            <label class="radio-card">
+              <input type="radio" name="difficulty" value="easy" checked />
+              <span class="radio-label">
+                  <strong>Lehká</strong>
+                  <small>4 × 4 = 8 párů</small>
+                </span>
+            </label>
+            <label class="radio-card">
+              <input type="radio" name="difficulty" value="medium" />
+              <span class="radio-label">
+                  <strong>Střední</strong>
+                  <small>6 × 6 = 18 párů</small>
+                </span>
+            </label>
+            <label class="radio-card">
+              <input type="radio" name="difficulty" value="hard" />
+              <span class="radio-label">
+                  <strong>Těžká</strong>
+                  <small>8 × 8 = 32 párů</small>
+                </span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Přezdívka hráče – input s autofocus a placeholder -->
+        <div class="field-group">
+          <label class="field-label" for="player-name">Přezdívka hráče</label>
+          <input
+                  type="text"
+                  id="player-name"
+                  name="playerName"
+                  class="text-input"
+                  placeholder="Např. Hugo"
+                  maxlength="20"
+                  autofocus
+                  autocomplete="off"
+          />
+          <span class="field-hint">Zobrazí se v žebříčku výsledků</span>
+        </div>
+
+        <!-- Hlasitost zvuku – range input -->
+        <div class="field-group">
+          <label class="field-label" for="volume-control">
+            Hlasitost zvuku
+            <output id="volume-output" for="volume-control">60%</output>
+          </label>
+          <input
+                  type="range"
+                  id="volume-control"
+                  name="volume"
+                  min="0"
+                  max="100"
+                  value="60"
+                  class="range-input"
+          />
+        </div>
+
+      </fieldset>
+
+      <!-- Tlačítka akcí -->
+      <div class="menu-actions">
+        <button type="submit" class="btn btn-primary" id="btn-start">
+          Zahájit hru
+        </button>
+        <button type="button" class="btn btn-secondary" id="btn-scores">
+          🏆 Výsledky
+        </button>
+      </div>
+    </form>
+
+    <!-- Panel nejlepších výsledků -->
+    <aside id="scores-panel" class="scores-panel hidden" aria-label="Nejlepší výsledky">
+      <h2>🏆 Síň slávy</h2>
+      <div id="scores-list" class="scores-list">
+      </div>
+      <button type="button" class="btn btn-ghost" id="btn-close-scores">Zavřít</button>
+    </aside>
+
+  </main>
+
+  <!-- Přepínač tmavého/světlého režimu -->
+  <nav class="top-controls" aria-label="Ovládání vzhledu">
+    <button class="theme-toggle" id="theme-toggle" aria-label="Přepnout tmavý/světlý režim">
+      <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="5"/>
+        <line x1="12" y1="1" x2="12" y2="3"/>
+        <line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/>
+        <line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </button>
+  </nav>
+
+  <!-- Indikátor stavu připojení k internetu -->
+  <div id="offline-banner" class="offline-banner hidden" role="alert">
+    ⚠️ Jsi offline – hra funguje i bez internetu!
+  </div>
+
+</section>
+
+<!-- ===================== HERNÍ OBRAZOVKA ===================== -->
+<section id="screen-game" class="screen hidden" aria-label="Herní plocha">
+
+  <!-- Horní panel s informacemi o hře -->
+  <header class="game-header">
+    <button class="btn btn-ghost btn-back" id="btn-back" aria-label="Zpět do menu">
+      ← Menu
+    </button>
+
+    <!-- Statistiky: tahy a časovač -->
+    <div class="game-stats">
+      <div class="stat-item">
+        <span class="stat-label">Tahy</span>
+        <output class="stat-value" id="moves-count">0</output>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">Čas</span>
+        <output class="stat-value" id="timer-display">00:00</output>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">Páry</span>
+        <output class="stat-value" id="pairs-count">0 / 0</output>
+      </div>
+    </div>
+
+    <!-- Tlačítko pro novou hru a přepínač tématu -->
+    <div class="game-controls">
+      <button type="button" class="btn btn-secondary btn-sm" id="btn-restart">
+        ↺ Restart
+      </button>
+      <button class="theme-toggle" id="theme-toggle-game" aria-label="Přepnout téma">
+        <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/>
+          <line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Herní mřížka – karty jsou generovány JavaScriptem -->
+  <main class="game-main">
+    <div id="game-board" class="game-board" role="grid" aria-label="Herní plocha pexesa">
+      <!-- Karty jsou vkládány dynamicky přes JS -->
+    </div>
+  </main>
+
+  <!-- Modální okno s výsledky po dokončení hry -->
+  <!-- Toto je webová komponenta <win-modal> definovaná v JS -->
+  <win-modal id="win-modal" hidden></win-modal>
+
+</section>
+
+<!-- ===================== SKRIPTY ===================== -->
+<!--
+  Skripty jsou vloženy na konci body pro správné načtení DOM.
+  Pořadí je důležité: nejdříve utility, pak třídy, nakonec main.
+-->
+<script src="js/sounds.js"></script>      <!-- Správa zvuků (Web Audio API) -->
+<script src="js/cards.js"></script>   <!-- SVG generátor karet a pozadí -->
+<script src="js/storage.js"></script>     <!-- Wrapper pro LocalStorage -->
+<script src="js/timer.js"></script>       <!-- Třída Timer -->
+<script src="js/card.js"></script>        <!-- Třída Card (OOP – prototyp) -->
+<script src="js/game.js"></script>        <!-- Třída Game – hlavní logika -->
+<script src="js/win-modal.js"></script>   <!-- Webová komponenta WinModal -->
+<script src="js/main.js"></script>        <!-- Inicializace aplikace -->
+</body>
+</html>
+
