@@ -48,7 +48,7 @@
 -->
 
 <!-- ===================== MENU OBRAZOVKA ===================== -->
-<div id="screen-menu" class="screen active" aria-label="Hlavní menu">
+<section id="screen-menu" class="screen active" aria-label="Hlavní menu">
   <svg id="header-bg" aria-hidden="true"></svg>
 
   <header class="menu-header">
@@ -59,7 +59,7 @@
     </h1>
   </header>
 
-  <section class="menu-main">
+  <div class="menu-main">
 
     <!-- Formulář nastavení hry -->
     <form id="game-settings" class="settings-form" novalidate>
@@ -148,7 +148,7 @@
       <button type="button" class="btn btn-ghost" id="btn-close-scores">Zavřít</button>
     </aside>
 
-  </section>
+  </div>
 
   <!-- Přepínač tmavého/světlého režimu -->
   <nav class="top-controls" aria-label="Ovládání vzhledu">
@@ -175,10 +175,10 @@
     ⚠️ Jsi offline – hra funguje i bez internetu!
   </div>
 
-</div>
+</section>
 
 <!-- ===================== HERNÍ OBRAZOVKA ===================== -->
-<div id="screen-game" class="screen hidden" aria-label="Herní plocha">
+<section id="screen-game" class="screen hidden" aria-label="Herní plocha">
 
   <!-- Horní panel s informacemi o hře -->
   <header class="game-header">
@@ -227,17 +227,17 @@
   </header>
 
   <!-- Herní mřížka – karty jsou generovány JavaScriptem -->
-  <section class="game-main">
-    <div id="game-board" class="game-board" role="grid" aria-label="Herní plocha pexesa">
+  <div class="game-main">
+    <div id="game-board" class="game-board" role="grid" aria-label="Plocha pexesa">
       <!-- Karty jsou vkládány dynamicky přes JS -->
     </div>
-  </section>
+  </div>
 
   <!-- Modální okno s výsledky po dokončení hry -->
   <!-- Toto je webová komponenta <win-modal> definovaná v JS -->
   <win-modal id="win-modal" hidden></win-modal>
 
-</div>
+</section>
 
 <!-- ===================== SKRIPTY ===================== -->
 <!--

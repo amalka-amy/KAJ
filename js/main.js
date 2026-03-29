@@ -321,7 +321,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   console.log(
-    '%c🃏 Pexeso načteno!',
+    '%cPexeso načteno!',
     'color: #8b4513; font-size: 18px; font-weight: bold;'
   );
 
