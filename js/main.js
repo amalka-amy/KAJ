@@ -20,38 +20,38 @@ document.addEventListener('DOMContentLoaded', function () {
   // 1. REFERENCE NA DOM ELEMENTY
   // ==========================================
 
-  var screenMenu    = document.getElementById('screen-menu');
-  var screenGame    = document.getElementById('screen-game');
-  var settingsForm  = document.getElementById('game-settings');
-  var playerInput   = document.getElementById('player-name');
-  var volumeSlider  = document.getElementById('volume-control');
-  var volumeOutput  = document.getElementById('volume-output');
-  var btnScores     = document.getElementById('btn-scores');
-  var btnCloseScores= document.getElementById('btn-close-scores');
-  var scoresPanel   = document.getElementById('scores-panel');
-  var scoresList    = document.getElementById('scores-list');
-  var btnBack       = document.getElementById('btn-back');
-  var btnRestart    = document.getElementById('btn-restart');
-  var offlineBanner = document.getElementById('offline-banner');
-  var headerBg      = document.getElementById('header-bg');
-  var winModal      = document.getElementById('win-modal');
+  let screenMenu    = document.getElementById('screen-menu');
+  let screenGame    = document.getElementById('screen-game');
+  let settingsForm  = document.getElementById('game-settings');
+  let playerInput   = document.getElementById('player-name');
+  let volumeSlider  = document.getElementById('volume-control');
+  let volumeOutput  = document.getElementById('volume-output');
+  let btnScores     = document.getElementById('btn-scores');
+  let btnCloseScores= document.getElementById('btn-close-scores');
+  let scoresPanel   = document.getElementById('scores-panel');
+  let scoresList    = document.getElementById('scores-list');
+  let btnBack       = document.getElementById('btn-back');
+  let btnRestart    = document.getElementById('btn-restart');
+  let offlineBanner = document.getElementById('offline-banner');
+  let headerBg      = document.getElementById('header-bg');
+  let winModal      = document.getElementById('win-modal');
 
   // Přepínače tématu (jsou dva – v menu a ve hře)
-  var themeToggles  = document.querySelectorAll('[id^="theme-toggle"]');
+  let themeToggles  = document.querySelectorAll('[id^="theme-toggle"]');
 
   // ==========================================
   // 2. INICIALIZACE HRY
   // ==========================================
 
-  var game = new Game();
+  let game = new Game();
 
   // ==========================================
   // 3. ULOŽENÉ NASTAVENÍ (LocalStorage)
   // Načteme téma a hlasitost z předchozí relace
   // ==========================================
 
-  var savedTheme  = PexesoStorage.getTheme();
-  var savedVolume = PexesoStorage.getVolume();
+  let savedTheme  = PexesoStorage.getTheme();
+  let savedVolume = PexesoStorage.getVolume();
 
   // Aplikujeme uložené téma
   document.documentElement.setAttribute('data-theme', savedTheme);
@@ -75,8 +75,8 @@ document.addEventListener('DOMContentLoaded', function () {
    * Přepne téma a uloží volbu do LocalStorage.
    */
   function toggleTheme() {
-    var current = document.documentElement.getAttribute('data-theme');
-    var next    = current === 'dark' ? 'light' : 'dark';
+    let current = document.documentElement.getAttribute('data-theme');
+    let next    = current === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', next);
     PexesoStorage.saveTheme(next);
     PexesoSounds.playClick();
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // ==========================================
 
   volumeSlider.addEventListener('input', function () {
-    var vol = parseInt(this.value, 10);
+    let vol = parseInt(this.value, 10);
     volumeOutput.textContent = vol + '%';
     PexesoSounds.setVolume(vol);
     PexesoStorage.saveVolume(vol);
@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function () {
     e.preventDefault(); // Zabráníme reload stránky
 
     // Validace: jméno hráče nesmí být prázdné
-    var name = playerInput.value.trim();
+    let name = playerInput.value.trim();
     if (!name) {
       playerInput.focus();
       playerInput.style.borderColor = 'var(--color-error)';
@@ -142,8 +142,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Načteme vybranou obtížnost
-    var difficultyEl = settingsForm.querySelector('input[name="difficulty"]:checked');
-    var difficulty   = difficultyEl ? difficultyEl.value : 'easy';
+    let difficultyEl = settingsForm.querySelector('input[name="difficulty"]:checked');
+    let difficulty   = difficultyEl ? difficultyEl.value : 'easy';
 
     PexesoSounds.playClick();
     showGame();
@@ -195,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function () {
    * Vykreslí nejlepší výsledky do panelu.
    */
   function renderScores() {
-    var all = PexesoStorage.getAllScores();
+    let all = PexesoStorage.getAllScores();
 
     if (all.length === 0) {
       scoresList.innerHTML = '';
@@ -203,8 +203,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Seřadíme: nejdříve podle obtížnosti (hard > medium > easy), pak podle času
-    var sorted = all.slice().sort(function (a, b) {
-      var diffOrder = { hard: 0, medium: 1, easy: 2 };
+    let sorted = all.slice().sort(function (a, b) {
+      let diffOrder = { hard: 0, medium: 1, easy: 2 };
       if (diffOrder[a.difficulty] !== diffOrder[b.difficulty]) {
         return diffOrder[a.difficulty] - diffOrder[b.difficulty];
       }
@@ -212,11 +212,11 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Vezměme top 10
-    var top10 = sorted.slice(0, 10);
+    let top10 = sorted.slice(0, 10);
 
-    var diffLabels = { easy: 'L', medium: 'S', hard: 'T' };
+    let diffLabels = { easy: 'L', medium: 'S', hard: 'T' };
 
-    scoresList.innerHTML = top10.map(function (s, i) {
+    scoresList.innerHTML = top10.map(function (s) {
       return '<div class="score-item">' +
         '<span>' + escapeHtml(s.player) + ' <small>(' + (diffLabels[s.difficulty] || s.difficulty) + ')</small></span>' +
         '<span>' + Timer.formatTime(s.time) + ' / ' + s.moves + ' tahů</span>' +
@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', function () {
    * Reaguje na popstate event (
    */
   window.addEventListener('popstate', function (e) {
-    var state = e.state;
+    let state = e.state;
 
     if (!state) {
       showMenu();
@@ -302,7 +302,7 @@ document.addEventListener('DOMContentLoaded', function () {
    * @returns {string}
    */
   function escapeHtml(str) {
-    var div = document.createElement('div');
+    let div = document.createElement('div');
     div.appendChild(document.createTextNode(String(str)));
     return div.innerHTML;
   }
@@ -313,7 +313,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   document.addEventListener('dragstart', function (e) {
     // Najdeme nejbližší .card ancestor
-    var cardEl = e.target.closest && e.target.closest('.card');
+    let cardEl = e.target.closest && e.target.closest('.card');
     if (cardEl) {
       e.dataTransfer.effectAllowed = 'none';
       e.preventDefault();

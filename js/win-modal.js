@@ -43,14 +43,14 @@ class WinModal extends HTMLElement {
    * (Místo Shadow DOM používáme Light DOM – snazší stylování)
    */
   _render() {
-    var r = this._result;
-    var timeStr  = Timer.formatTime(r.time);
-    var diffLabels = { easy: 'Lehká', medium: 'Střední', hard: 'Těžká' };
-    var diffLabel  = diffLabels[r.difficulty] || r.difficulty;
+    let r = this._result;
+    let timeStr  = Timer.formatTime(r.time);
+    let diffLabels = { easy: 'Lehká', medium: 'Střední', hard: 'Těžká' };
+    let diffLabel  = diffLabels[r.difficulty] || r.difficulty;
 
     // Zkontrolujeme, zda je to nový rekord (pokud je jeden anebo pokud splnuje podmínky)
-    var scores   = PexesoStorage.getScores(r.difficulty);
-    var isRecord = scores.length === 1 ||
+    let scores   = PexesoStorage.getScores(r.difficulty);
+    let isRecord = scores.length === 1 ||
                    (scores.length > 0 && scores[0].time === r.time && scores[0].moves === r.moves);
 
     this.innerHTML = `
@@ -86,7 +86,7 @@ class WinModal extends HTMLElement {
     `;
 
     // Přidáme posluchače tlačítek
-    var self = this;
+    let self = this;
     this.querySelector('#modal-btn-again').addEventListener('click', function () {
       PexesoSounds.playClick();
       self.hide();
@@ -100,7 +100,7 @@ class WinModal extends HTMLElement {
     });
 
     // Fokus na první tlačítko (přístupnost)
-    var firstBtn = this.querySelector('#modal-btn-again');
+    let firstBtn = this.querySelector('#modal-btn-again');
     if (firstBtn) firstBtn.focus();
   }
 
@@ -110,7 +110,7 @@ class WinModal extends HTMLElement {
    * @returns {string}
    */
   _escapeHtml(str) {
-    var div = document.createElement('div');
+    let div = document.createElement('div');
     div.appendChild(document.createTextNode(String(str)));
     return div.innerHTML;
   }

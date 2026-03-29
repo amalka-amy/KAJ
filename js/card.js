@@ -30,7 +30,7 @@ function Card(cardId, index) {
  */
 Card.prototype.createDOM = function () {
   // Obal karty
-  var card = document.createElement('div');
+  let card = document.createElement('div');
   card.className = 'card';
   card.setAttribute('role', 'gridcell');
   card.setAttribute('aria-label', 'Karta ' + (this.index + 1));
@@ -39,18 +39,18 @@ Card.prototype.createDOM = function () {
   card.style.animationDelay = (this.index * 40) + 'ms';
 
   // Vnitřní kontejner
-  var inner = document.createElement('div');
+  let inner = document.createElement('div');
   inner.className = 'card-inner';
 
   // Rub karty
-  var back = document.createElement('div');
+  let back = document.createElement('div');
   back.className = 'card-back';
 
   // SVG vzor rubu generujeme v PictureCard.createDOM
-  var backSVG = PexesoSVG.generateCardBack();
+  let backSVG = PexesoSVG.generateCardBack();
 
   // Líc karty
-  var front = document.createElement('div');
+  let front = document.createElement('div');
   front.className = 'card-front';
 
   back.appendChild(backSVG);
@@ -69,7 +69,7 @@ Card.prototype.createDOM = function () {
  * @param {function(Card): void} onClick
  */
 Card.prototype.addClickListener = function (onClick) {
-  var self = this
+  let self = this
   this.element.addEventListener('click', function () {
     onClick(self);
   });
@@ -117,7 +117,7 @@ function PictureCard(cardId, index) {
 PictureCard.prototype = Object.create(Card.prototype);
 
 PictureCard.prototype.createDOM = function () {
-  var element = Card.prototype.createDOM.call(this);
+  let element = Card.prototype.createDOM.call(this);
 
   // Vložení obrázku pomocí innerHTML je nejkratší cesta
   this._frontEl.innerHTML = '<img src="' + this.image + '" '+

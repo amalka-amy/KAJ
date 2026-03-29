@@ -6,13 +6,13 @@
  * Použité API: Web Audio API (AudioContext, OscillatorNode, GainNode)
  */
 
-var PexesoSounds = (function () {
+let PexesoSounds = (function () {
 
   /** @type {AudioContext|null} Sdílený audio kontext */
-  var ctx = null;
+  let ctx = null;
 
   /** @type {number} Hlasitost 0–1 */
-  var masterVolume = 0.6;
+  let masterVolume = 0.6;
 
   /**
    *
@@ -41,16 +41,16 @@ var PexesoSounds = (function () {
     delay = delay || 0;
     vol   = vol   !== undefined ? vol : 1;
 
-    var context = getContext();
-    var now = context.currentTime;
+    let context = getContext();
+    let now = context.currentTime;
 
     // Oscilátor – generuje zvuk
-    var osc = context.createOscillator();
+    let osc = context.createOscillator();
     osc.type = type;
     osc.frequency.setValueAtTime(frequency, now + delay);
 
     // Gain nod – ovládá hlasitost
-    var gain = context.createGain();
+    let gain = context.createGain();
     gain.gain.setValueAtTime(0, now + delay);
     // Náběh (attack)
     gain.gain.linearRampToValueAtTime(masterVolume * vol, now + delay + 0.02);
@@ -112,7 +112,7 @@ var PexesoSounds = (function () {
      * Sekvence tónů, které znějí slavnostně.
      */
     playWin: function () {
-      var melody = [
+      let melody = [
         { f: 523, d: 0.15, t: 0 },    // C5
         { f: 659, d: 0.15, t: 0.15 }, // E5
         { f: 784, d: 0.15, t: 0.30 }, // G5

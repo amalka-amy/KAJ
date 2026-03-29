@@ -9,9 +9,9 @@
  *   pexeso_volume   – uložená hlasitost (0–100)
  */
 
-var PexesoStorage = (function () {
+let PexesoStorage = (function () {
 
-  var KEYS = {
+  let KEYS = {
     SCORES: 'pexeso_scores',
     THEME:  'pexeso_theme',
     VOLUME: 'pexeso_volume'
@@ -25,7 +25,7 @@ var PexesoStorage = (function () {
    */
   function safeGet(key, defaultValue) {
     try {
-      var raw = localStorage.getItem(key);
+      let raw = localStorage.getItem(key);
       return raw !== null ? JSON.parse(raw) : defaultValue;
     } catch (e) {
       console.warn('LocalStorage read error:', e);
@@ -53,7 +53,7 @@ var PexesoStorage = (function () {
      * @param {Object} result - { player, difficulty, time, moves, date }
      */
     saveScore: function (result) {
-      var scores = safeGet(KEYS.SCORES, []);
+      let scores = safeGet(KEYS.SCORES, []);
       scores.push(result);
 
       // Seřadí výsledky: nejprve nejlepší čas, pak tahy
@@ -74,7 +74,7 @@ var PexesoStorage = (function () {
      * @returns {Array}
      */
     getScores: function (difficulty) {
-      var all = safeGet(KEYS.SCORES, []);
+      let all = safeGet(KEYS.SCORES, []);
       return all
         .filter(function (s) { return s.difficulty === difficulty; })
         .slice(0, 5); // Top 5

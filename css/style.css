@@ -55,6 +55,7 @@
   --card-gap:     12px;
   --border-radius: 8px;
   --border-radius-card: 10px;
+  --board-cols:0px;
 
   /* Přechody */
   --transition-fast:   0.15s ease;
@@ -106,7 +107,7 @@ html {
 }
 
 body {
-  font-family: var(--font-body);
+  font-family: var(--font-body), serif;
   background-color: var(--color-bg);
   background-image: var(--texture);
   color: var(--color-text);
@@ -121,7 +122,7 @@ body {
    ============================================================ */
 
 h1, h2, h3 {
-  font-family: var(--font-display);
+  font-family: var(--font-display), serif;
   line-height: 1.2;
 }
 
@@ -229,7 +230,7 @@ fieldset {
 }
 
 legend {
-  font-family: var(--font-display);
+  font-family: var(--font-display), serif;
   font-size: 1.1rem;
   color: var(--color-primary);
   margin-bottom: 1rem;
@@ -299,7 +300,7 @@ legend {
     text-align: center;
 
     & strong {
-      font-family: var(--font-display);
+      font-family: var(--font-display), serif;
       color: var(--color-text);
     }
 
@@ -339,7 +340,7 @@ legend {
   border-radius: var(--border-radius);
   background: var(--color-bg);
   color: var(--color-text);
-  font-family: var(--font-body);
+  font-family: var(--font-body), serif;
   font-size: 1rem;
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 
@@ -386,7 +387,7 @@ legend {
   padding: 0.65rem 1.4rem;
   border: 2px solid transparent;
   border-radius: var(--border-radius);
-  font-family: var(--font-display);
+  font-family: var(--font-display), serif;
   font-size: 0.95rem;
   font-weight: 700;
   cursor: pointer;
@@ -573,7 +574,7 @@ legend {
 }
 
 .stat-value {
-  font-family: var(--font-display);
+  font-family: var(--font-display), serif;
   font-size: 1.3rem;
   font-weight: 700;
   color: var(--color-primary);
@@ -783,7 +784,7 @@ legend {
    11. WEBOVÁ KOMPONENTA win-modal
    ============================================================ */
 
-win-modal {
+#win-modal {
   display: contents;
 }
 
@@ -840,7 +841,7 @@ win-modal {
     }
 
     & dd {
-      font-family: var(--font-display);
+      font-family: var(--font-display), serif;
       font-size: 1.4rem;
       color: var(--color-primary);
       font-weight: 700;

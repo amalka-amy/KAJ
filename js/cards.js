@@ -11,7 +11,7 @@
  *   - svg:    funkce vracející SVGElement s načteným obrázkem
  */
 
-var PexesoSVG = (function () {
+let PexesoSVG = (function () {
 
   /**
    * Vytvoří SVG element se správným namespace.
@@ -20,8 +20,8 @@ var PexesoSVG = (function () {
    * @returns {SVGElement}
    */
   function el(tag, attrs) {
-    var ns = 'http://www.w3.org/2000/svg';
-    var e = document.createElementNS(ns, tag);
+    let ns = 'http://www.w3.org/2000/svg';
+    let e = document.createElementNS(ns, tag);
     for (var key in attrs) {
       if (Object.prototype.hasOwnProperty.call(attrs, key)) {
         e.setAttribute(key, attrs[key]);
@@ -43,15 +43,15 @@ var PexesoSVG = (function () {
   }
 
   function createImageCard(id, name) {
-    var s = createSVG();
+    let s = createSVG();
     s.setAttribute('aria-label', name);
 
-    var bg = el('rect', {
+    let bg = el('rect', {
       x: '5', y: '5', width: '90', height: '90',
       fill: 'white'
     });
 
-    var img = el('image', {
+    let img = el('image', {
       href: IMAGE_BASE_PATH + id + IMAGE_EXTENSION,
       x: '5',
       y: '5',
@@ -70,7 +70,7 @@ var PexesoSVG = (function () {
   // (bez přípony) ve složce IMAGE_BASE_PATH.
   // ==========================================
 
-  var cards = [
+  let cards = [
     { id: 'jablko',    name: 'Jablko' },
     { id: 'citron',    name: 'Citrón' },
     { id: 'jahoda',    name: 'Jahoda' },
@@ -113,7 +113,7 @@ var PexesoSVG = (function () {
      * @returns {string}
      */
     getCardName: function (id) {
-      var card = cards.find(function (c) { return c.id === id; });
+      let card = cards.find(function (c) { return c.id === id; });
       return card ? card.name : id;
     },
 
@@ -140,22 +140,22 @@ var PexesoSVG = (function () {
      * @returns {SVGSVGElement}
      */
     generateCardBack: function () {
-      var s = el('svg', {
+      let s = el('svg', {
         viewBox: '0 0 100 100',
         xmlns: 'http://www.w3.org/2000/svg'
       });
 
-      var bg = el('rect', { width: '100', height: '100', fill: '#8b4513' });
+      let bg = el('rect', { width: '100', height: '100', fill: '#8b4513' });
       s.appendChild(bg);
 
-      var border = el('rect', { x: '5', y: '5', width: '90', height: '90',
+      let border = el('rect', { x: '5', y: '5', width: '90', height: '90',
         fill: 'none', stroke: '#f5d020', 'stroke-width': '2', rx: '3' });
       s.append(border);
 
       // Rohové dekorace (mini ♣)
-      var corners = [[14, 14], [86, 14], [14, 86], [86, 86]];
+      let corners = [[14, 14], [86, 14], [14, 86], [86, 86]];
       corners.forEach(function (c) {
-        var club = el('text', {
+        let club = el('text', {
           x: c[0], y: c[1],
           'text-anchor': 'middle',
           'dominant-baseline': 'central',
@@ -179,7 +179,7 @@ var PexesoSVG = (function () {
       container.setAttribute('viewBox', '0 0 800 280');
 
       for (var i = 0; i < 5; i++) {
-        var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
         line.setAttribute('x1', '0');
         line.setAttribute('y1', String(56 * i));
         line.setAttribute('x2', '800');

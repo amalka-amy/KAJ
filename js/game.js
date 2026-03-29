@@ -18,7 +18,7 @@ function Game() {
   this.playerName    = '';
 
   // Časovač
-  var self = this;
+  let self = this;
   this.timer = new Timer(function (elapsed) {
     self._updateTimerDisplay(elapsed);
   });
@@ -54,7 +54,7 @@ Game.prototype.start = function (settings) {
   this.difficulty = settings.difficulty || 'easy';
   this.playerName = settings.playerName || 'Hráč';
 
-  var config = Game.DIFFICULTIES[this.difficulty];
+  let config = Game.DIFFICULTIES[this.difficulty];
   this.totalPairs   = config.pairs;
   this.matchedPairs = 0;
   this.moves        = 0;
@@ -101,26 +101,26 @@ Game.prototype.restart = function () {
  * @param {number} pairCount - počet párů
  */
 Game.prototype._generateCards = function (pairCount) {
-  var allCards = PexesoSVG.getCards();
+  let allCards = PexesoSVG.getCards();
 
   // Pokud je párů víc než karet, opakujeme sadu
-  var selectedIds = [];
-  var i = 0;
+  let selectedIds = [];
+  let i = 0;
   while (selectedIds.length < pairCount) {
     selectedIds.push(allCards[i % allCards.length].id);
     i++;
   }
 
   // Zduplikujeme každý id pro vytvoření páru
-  var pairs = [];
+  let pairs = [];
   selectedIds.forEach(function (id) {
     pairs.push(id, id); // dvě karty se stejným id
   });
 
   // Fisher-Yates shuffle – algoritmus pro náhodné promíchání
   for (var j = pairs.length - 1; j > 0; j--) {
-    var k = Math.floor(Math.random() * (j + 1));
-    var tmp = pairs[j];
+    let k = Math.floor(Math.random() * (j + 1));
+    let tmp = pairs[j];
     pairs[j] = pairs[k];
     pairs[k] = tmp;
   }
@@ -137,9 +137,9 @@ Game.prototype._generateCards = function (pairCount) {
 Game.prototype._renderCards = function () {
   this.boardEl.innerHTML = '';
 
-  var self = this;
+  let self = this;
   this.cards.forEach(function (card) {
-    var el = card.createDOM();
+    let el = card.createDOM();
     card.addClickListener(function (clickedCard) {
       self._onCardClick(clickedCard);
     });
@@ -185,8 +185,8 @@ Game.prototype._onCardClick = function (card) {
  * Zkontroluje, zda otočené dvě karty tvoří pár.
  */
 Game.prototype._checkMatch = function () {
-  var card1 = this.flippedCards[0];
-  var card2 = this.flippedCards[1];
+  let card1 = this.flippedCards[0];
+  let card2 = this.flippedCards[1];
 
   if (card1.cardId === card2.cardId) {
     // ✅ SHODA! – označíme karty jako spárované
@@ -226,7 +226,7 @@ Game.prototype._handleMatch = function (card1, card2) {
 Game.prototype._handleMismatch = function (card1, card2) {
   // Zamkneme plochu na dobu animace
   this.isLocked = true;
-  var self = this;
+  let self = this;
 
   PexesoSounds.playMismatch();
 
@@ -243,14 +243,14 @@ Game.prototype._handleMismatch = function (card1, card2) {
  * Zpracuje výhru – zastaví časovač, zobrazí modál.
  */
 Game.prototype._handleWin = function () {
-  var self = this;
+  let self = this;
   // Krátké zpoždění pro poslední animaci karty
   setTimeout(function () {
     self.timer.stop();
     PexesoSounds.playWin();
 
     // Uložíme výsledek do LocalStorage
-    var result = {
+    let result = {
       player:     self.playerName,
       difficulty: self.difficulty,
       time:       self.timer.getElapsed(),

@@ -4,7 +4,7 @@
  * Zapouzdřuje logiku časovače hry.
  *
  * Použití:
- *   var t = new Timer(function(elapsed) { ... });
+ *   let t = new Timer(function(elapsed) { ... });
  *   t.start();
  *   t.stop();
  *   t.reset();
@@ -32,7 +32,7 @@ Timer.prototype.start = function () {
   if (this._running) return;
   this._running = true;
 
-  var self = this; // uložíme kontext pro closure
+  let self = this; // uložíme kontext pro closure
   this._intervalId = setInterval(function () {
     self._elapsed += 1;
     self._onTick(self._elapsed);
@@ -80,7 +80,7 @@ Timer.prototype.isRunning = function () {
  * @returns {string}
  */
 Timer.formatTime = function (seconds) {
-  var m = Math.floor(seconds / 60);
-  var s = seconds % 60;
+  let m = Math.floor(seconds / 60);
+  let s = seconds % 60;
   return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
 };
