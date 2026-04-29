@@ -130,8 +130,6 @@ h1, h2, h3 {
   font-size: clamp(2.5rem, 8vw, 5rem);
   color: var(--color-primary);
   letter-spacing: 0.05em;
-  text-shadow: 2px 3px 0 var(--color-accent-dark);
-
 
   & .title-deco {
     color: var(--color-accent);
@@ -413,7 +411,6 @@ legend {
     &:hover:not(:disabled) {
       background: var(--color-primary-h);
       transform: translateY(-2px);
-      box-shadow: var(--shadow-md);
     }
 
     &:active:not(:disabled) {
