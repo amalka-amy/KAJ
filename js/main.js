@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
   allCards.forEach(function(card) {
     let preloadImg = new Image();
     preloadImg.src = 'img/' + card.id + '.jpg';
+    preloadImg.alt = card.name;
     hiddenDiv.appendChild(preloadImg);
   });
 

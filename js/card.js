@@ -18,6 +18,7 @@ Card.prototype.createDOM = function () {
   let card = document.createElement('div');
   card.className = 'card';
   card.setAttribute('aria-label', 'Karta ' + (this.index + 1));
+  card.setAttribute('role', 'button');
   let inner = document.createElement('div');
   inner.className = 'card-inner';
   let back = document.createElement('div');
